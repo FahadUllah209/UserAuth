@@ -1,0 +1,86 @@
+
+.container {
+  width: 350px;
+  background-color: #22a9e3;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 50px auto;
+}
+
+.heading {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+
+.container svg {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+
+.feilds {
+  display: flex;
+  flex-direction: column;
+}
+
+.feilds input {
+  width: 90%;
+  padding: 10px;
+  margin: 8px auto;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+
+.feilds p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.feilds a {
+  color: #ff9800;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.feilds a:hover {
+  text-decoration: underline;
+}
+
+
+button {
+  background-color: #ff9800;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #e68900;
+}
+
+
+@media (max-width: 480px) {
+  .container {
+    width: 90%;
+  }
+
+  .feilds input {
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 16px;
+  }
+}
