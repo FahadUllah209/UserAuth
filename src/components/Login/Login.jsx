@@ -2,55 +2,52 @@ import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import "./Login.css";
 import Navbar from "../Navbar/Navbar";
-import {Navigate, useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigation = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState({ email: "", password: "", general: "" });
 
-  const navigation = useNavigate()
-  const [email ,setEmail] = useState("");
-  const [password ,setPassword] = useState("");
-  const [errorMsg , setErrorMsg] = useState("")
+  const handleInput = (event) => {
+    const { name, value } = event.target;
+    if (name === "email") {
+      setEmail(value);
+    }
+    if (name === "password") {
+      setPassword(value);
+    }
+  };
 
-  const handleInput = (event) =>{
-        const name = event.target.name;
-        const value = event.target.value;
-        if(name == "email"){
-          setEmail(value)
-        }
-        if(name == "password"){
-          setPassword(value)
-        }
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setError({ email: "", password: "", general: "" });
 
-  const handleSubmit = (event)=>{
-
-    event.preventDefault()
-    let getDetail = JSON.parse(localStorage.getItem("user"))
-    console.log(getDetail)
-
-    let found = false;
-    getDetail.map((curValue) => {
-      let storeEmail = curValue.email;
-      let storePassword = curValue.password;
-
-      if (storeEmail === email && storePassword === password) {
-        alert("Login Successful");
-        setErrorMsg("");
-        found = true;
-
-        navigation("/home")
-      }
-    });
-
-    if (!found) {
-      setErrorMsg("Email and Password are Incorrect");
+    if (email === "") {
+      setError((prev) => ({ ...prev, email: "Email is required." }));
+      return;
     }
 
-  }
+    if (password === "") {
+      setError((prev) => ({ ...prev, password: "Password is required." }));
+      return;
+    }
+
+    let getDetail = JSON.parse(localStorage.getItem("user")) || [];
+    let found = getDetail.find((curValue) => curValue.email === email && curValue.password === password);
+
+    if (found) {
+      alert("Login Successful");
+      navigation("/home");
+    } else {
+      setError((prev) => ({ ...prev, general: "Email and Password are incorrect." }));
+    }
+  };
+
   return (
     <>
       <Navbar />
-      <p className="error-msg">{errorMsg}</p>
       <div className="container">
         <h1 className="heading">Login Here</h1>
         <CgProfile />
@@ -62,17 +59,20 @@ function Login() {
               placeholder="Enter Your Email"
               onChange={handleInput}
             />
+            {error.email && <p className="error-message" style={{ color: "red" }}>{error.email}</p>}
             <input
               type="password"
               name="password"
               placeholder="Enter Your Password"
               onChange={handleInput}
             />
+            {error.password && <p className="error-message" style={{ color: "red" }}>{error.password}</p>}
+            {error.general && <p className="error-message" style={{ color: "red" }}>{error.general}</p>}
             <p>
-              Don't have an account? <a href="#">Sign Up</a>
+              Don't have an account? <a href="/signup">Sign Up</a>
             </p>
           </div>
-          <button>Login</button>
+          <button type="submit">Login</button>
         </form>
       </div>
     </>
