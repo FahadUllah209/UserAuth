@@ -49,7 +49,7 @@ function SignUp() {
       return;
     }
 
-    // Check if email already exists
+
     const existingUsers = JSON.parse(localStorage.getItem("user") || "[]");
     const emailExists = existingUsers.some((user) => user.email === data.email);
 
@@ -58,7 +58,6 @@ function SignUp() {
       return;
     }
 
-    // Store new user
     let updatedUsers = [...existingUsers, data];
     localStorage.setItem("user", JSON.stringify(updatedUsers));
 
