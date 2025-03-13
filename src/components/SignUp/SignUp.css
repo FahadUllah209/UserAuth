@@ -1,4 +1,3 @@
-
 .container {
   width: 350px;
   background-color: #22a9e3;
@@ -15,19 +14,17 @@
   margin-bottom: 15px;
 }
 
-
 .container svg {
   font-size: 50px;
   margin-bottom: 10px;
 }
 
-
-.feilds {
+.fields {
   display: flex;
   flex-direction: column;
 }
 
-.feilds input {
+.fields input {
   width: 90%;
   padding: 10px;
   margin: 8px auto;
@@ -36,23 +33,21 @@
   font-size: 16px;
 }
 
-
-.feilds p {
+.fields p {
   margin: 10px 0;
   font-size: 14px;
 }
 
-.feilds a {
+.fields a {
   color: #ff9800;
   text-decoration: none;
   font-weight: bold;
   font-size: 1rem;
 }
 
-.feilds a:hover {
+.fields a:hover {
   text-decoration: underline;
 }
-
 
 button {
   background-color: #ff9800;
@@ -70,17 +65,21 @@ button:hover {
   background-color: #e68900;
 }
 
+.error {
+  color: red;
+  font-size: 14px;
+}
 
 @media (max-width: 480px) {
   .container {
-    width: 90%;
+      width: 90%;
   }
 
-  .feilds input {
-    font-size: 14px;
+  .fields input {
+      font-size: 14px;
   }
 
   button {
-    font-size: 16px;
+      font-size: 16px;
   }
 }

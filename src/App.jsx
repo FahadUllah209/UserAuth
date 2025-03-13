@@ -1,24 +1,26 @@
-import { useState } from 'react'
-import './App.css'
-import Navbar from './components/Navbar/Navbar'
-import SignUp from './components/SignUp/SignUp'
-import Login from './components/Login/Login'
-import {BrowserRouter , Routes , Route} from 'react-router-dom'
-import Home from './components/Home/Home'
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SignUp from "./components/SignUp/SignUp";
+import Login from "./components/Login/Login";
+import Home from "./components/Home/Home";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-
-
   return (
-   <BrowserRouter>
-   <Routes>
-    <Route path='/' element={<SignUp/>}/>
-    <Route path='/login' element={<Login/>}/>
-    <Route path='/home' element={<Home/>}/>
-    </Routes>
-   </BrowserRouter>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route 
+          path="/home" 
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } 
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
