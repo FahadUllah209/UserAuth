@@ -14,7 +14,7 @@ function Login() {
     e.preventDefault();
     setError("");
 
-    let users = JSON.parse(localStorage.getItem("users")) || [];
+    let users = JSON.parse(localStorage.getItem("user")) || [];
     let foundUser = users.find((user) => user.email === email && user.password === password);
 
     if (foundUser) {

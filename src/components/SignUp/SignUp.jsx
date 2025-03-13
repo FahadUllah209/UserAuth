@@ -1,63 +1,94 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../Navbar/Navbar";
 import { CgProfile } from "react-icons/cg";
 import "./SignUp.css";
+import Navbar from "../Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
-  const [data, setData] = useState({ name: "", email: "", password: "" });
-  const [error, setError] = useState({});
-  const navigate = useNavigate();
+  const Userdata = {
+    name: "",
+    password: "",
+    email: "",
+  };
+  const [data, setData] = useState(Userdata);
+  const [error, setError] = useState({ name: "", password: "", email: "" });
+  const navigation = useNavigate();
 
-  const handleInput = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleInput = (event) => {
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError({});
-    
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setError({ name: "", password: "", email: "" });
+
     let newErrors = {};
-    if (!data.name) newErrors.name = "Name is required.";
-    if (!data.email) newErrors.email = "Email is required.";
-    else if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(data.email))
-      newErrors.email = "Invalid email format.";
-    
-    if (!data.password) newErrors.password = "Password is required.";
-    else if (data.password.length < 8 || !/[!@#$%^&*]/.test(data.password))
-      newErrors.password = "Password must be 8+ characters & include a special character.";
+
+    if (data.name === "") {
+      newErrors.name = "Username is required.";
+    }
+
+    if (data.password === "") {
+      newErrors.password = "Password is required.";
+    } else if (data.password.length < 8 || !/[!@#$%^&*(),.?":{}|<>]/.test(data.password)) {
+      newErrors.password = "Password must be at least 8 characters long and contain a special character.";
+    }
+
+    if (data.email === "") {
+      newErrors.email = "Email is required.";
+    } else {
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailPattern.test(data.email)) {
+        newErrors.email = "Please enter a valid email.";
+      }
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setError(newErrors);
       return;
     }
 
-    let users = JSON.parse(localStorage.getItem("users") || "[]");
-    users.push(data);
-    localStorage.setItem("users", JSON.stringify(users));
+    // Check if email already exists
+    const existingUsers = JSON.parse(localStorage.getItem("user") || "[]");
+    const emailExists = existingUsers.some((user) => user.email === data.email);
 
-    alert("SignUp Successful!");
-    navigate("/login");
+    if (emailExists) {
+      setError({ email: "This email is already registered." });
+      return;
+    }
+
+    // Store new user
+    let updatedUsers = [...existingUsers, data];
+    localStorage.setItem("user", JSON.stringify(updatedUsers));
+
+    alert("SignUp Successfully");
+    navigation("/login");
   };
 
   return (
-    <>
+    <div>
       <Navbar />
       <div className="container">
-        <h1>Sign Up</h1>
+        <h1 className="heading">SignUp Here</h1>
         <CgProfile />
         <form onSubmit={handleSubmit}>
-          <input type="text" name="name" placeholder="Name" onChange={handleInput} />
-          {error.name && <p className="error">{error.name}</p>}
-          
-          <input type="email" name="email" placeholder="Email" onChange={handleInput} />
-          {error.email && <p className="error">{error.email}</p>}
-          
-          <input type="password" name="password" placeholder="Password" onChange={handleInput} />
-          {error.password && <p className="error">{error.password}</p>}
+          <div className="fields">
+            <input type="text" name="name" placeholder="Enter Your Name" onChange={handleInput} />
+            {error.name && <p className="error-message" style={{ color: "red" }}>{error.name}</p>}
 
-          <button type="submit">Sign Up</button>
+            <input type="password" name="password" placeholder="Password" onChange={handleInput} />
+            {error.password && <p className="error-message" style={{ color: "red" }}>{error.password}</p>}
+
+            <input type="email" name="email" placeholder="Email" onChange={handleInput} />
+            {error.email && <p className="error-message" style={{ color: "red" }}>{error.email}</p>}
+
+            <p>Already have an account? <a href="/login">Login</a></p>
+          </div>
+          <button type="submit">SignUp</button>
         </form>
       </div>
-    </>
+    </div>
   );
 }
 
