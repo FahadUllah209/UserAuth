@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import "./SignUp.css";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -91,16 +90,18 @@ const SignUp = () => {
     setErrors(newErrors);
 
     if (isValid) {
-      const existingUsers = JSON.parse(localStorage.getItem('user') || '[]');
+      const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
       const emailExists = existingUsers.some(user => user.email === formData.email);
 
       if (emailExists) {
-        newErrors.email = "This email is already registered.";
-        isValid = false;
-        setErrors(newErrors);
+        setErrors({
+          ...newErrors,
+          email: "This email is already registered"
+        });
         return;
       }
 
+      // Create new user object without confirmPassword
       const newUser = {
         name: formData.name,
         email: formData.email,
@@ -109,12 +110,18 @@ const SignUp = () => {
         phoneNumber: formData.phoneNumber
       };
 
+      // Add new user to existing users
       const updatedUsers = [...existingUsers, newUser];
-      localStorage.setItem('user', JSON.stringify(updatedUsers));
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      localStorage.setItem('users', JSON.stringify(updatedUsers));
 
-      alert('SignUp Successfully!');
-      navigate('/home');
+      // Remove any existing currentUser data to ensure user has to login
+      localStorage.removeItem('currentUser');
+
+      // Show success message
+      alert('SignUp Successful! Please login to continue.');
+      
+      // Redirect to login page
+      navigate('/login');
     }
   };
 

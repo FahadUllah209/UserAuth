@@ -1,18 +1,22 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import "./Login.css";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     userType: "user",
     phoneNumber: ""
   });
-  const [error, setError] = useState({ email: "", password: "", phoneNumber: "" });
-  const navigate = useNavigate();
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    phoneNumber: "",
+    general: ""
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,10 +25,11 @@ const Login = () => {
       [name]: value
     }));
     // Clear the error when user starts typing
-    setError({
-      ...error,
-      [name]: ''
-    });
+    setErrors(prev => ({
+      ...prev,
+      [name]: "",
+      general: ""
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -34,10 +39,10 @@ const Login = () => {
 
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
       isValid = false;
     }
 
@@ -45,44 +50,66 @@ const Login = () => {
     if (!formData.password) {
       newErrors.password = "Password is required";
       isValid = false;
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-      isValid = false;
-    } else if (!/(?=.*[0-9])/.test(formData.password)) {
-      newErrors.password = "Password must contain at least one number";
-      isValid = false;
-    } else if (!/(?=.*[!@#$%^&*])/.test(formData.password)) {
-      newErrors.password = "Password must contain at least one special character (!@#$%^&*)";
-      isValid = false;
     }
 
     // Phone validation for contractors
-    if (formData.userType === "contractor") {
-      if (!formData.phoneNumber) {
-        newErrors.phoneNumber = 'Phone number is required for contractors';
-        isValid = false;
-      }
+    if (formData.userType === "contractor" && !formData.phoneNumber) {
+      newErrors.phoneNumber = "Phone number is required for contractors";
+      isValid = false;
     }
 
-    setError(newErrors);
+    setErrors(newErrors);
 
     if (isValid) {
-      const existingUsers = JSON.parse(localStorage.getItem("user") || "[]");
-      const user = existingUsers.find(
-        (user) => 
-          user.email === formData.email && 
-          user.password === formData.password &&
-          user.userType === formData.userType &&
-          (formData.userType === "user" || (formData.userType === "contractor" && user.phoneNumber === formData.phoneNumber))
-      );
+      // Get users from localStorage
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      
+      // Find user with matching email
+      const user = users.find(u => u.email === formData.email);
 
-      if (user) {
-        localStorage.setItem("currentUser", JSON.stringify(user));
-        alert("Login Successfully");
-        navigate("/home");
-      } else {
-        setError({ email: "Invalid credentials or user type." });
+      if (!user) {
+        setErrors(prev => ({
+          ...prev,
+          general: "User not found. Please sign up first."
+        }));
+        return;
       }
+
+      // Check if password matches
+      if (user.password !== formData.password) {
+        setErrors(prev => ({
+          ...prev,
+          general: "Invalid password"
+        }));
+        return;
+      }
+
+      // Check if user type matches
+      if (user.userType !== formData.userType) {
+        setErrors(prev => ({
+          ...prev,
+          general: "Invalid user type selected"
+        }));
+        return;
+      }
+
+      // For contractors, verify phone number
+      if (user.userType === "contractor" && user.phoneNumber !== formData.phoneNumber) {
+        setErrors(prev => ({
+          ...prev,
+          phoneNumber: "Invalid phone number"
+        }));
+        return;
+      }
+
+      // Store current user in localStorage
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      
+      // Show success message
+      alert('Login Successful!');
+
+      // Navigate to home page
+      navigate('/home');
     }
   };
 
@@ -92,25 +119,41 @@ const Login = () => {
       <CgProfile />
       <form onSubmit={handleSubmit}>
         <div className="fields">
-          <input type="email" name="email" placeholder="Email" onChange={handleChange} required className={error.email ? 'error-input' : ''} />
-          {error.email && <p className="error-message" style={{ color: "red" }}>{error.email}</p>}
+          {errors.general && <p className="error-message">{errors.general}</p>}
 
-          <input type="password" name="password" placeholder="Password" onChange={handleChange} required className={error.password ? 'error-input' : ''} />
-          {error.password && <p className="error-message" style={{ color: "red" }}>{error.password}</p>}
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            className={errors.email ? "error-input" : ""}
+            required
+          />
+          {errors.email && <p className="error-message">{errors.email}</p>}
 
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className={errors.password ? "error-input" : ""}
+            required
+          />
+          {errors.password && <p className="error-message">{errors.password}</p>}
           {formData.userType === "contractor" && (
-            <>
-              <input 
-                type="tel" 
-                name="phoneNumber" 
-                placeholder="Phone Number" 
-                onChange={handleChange}
-                required={formData.userType === "contractor"}
-                className={error.phoneNumber ? 'error-input' : ''}
-              />
-              {error.phoneNumber && <p className="error-message" style={{ color: "red" }}>{error.phoneNumber}</p>}
-            </>
+            <input
+              type="tel"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              className={errors.phoneNumber ? "error-input" : ""}
+              required={formData.userType === "contractor"}
+            />
           )}
+          {errors.phoneNumber && <p className="error-message">{errors.phoneNumber}</p>}
 
           <div className="user-type-buttons">
             <button
@@ -129,7 +172,9 @@ const Login = () => {
             </button>
           </div>
 
-          <p>Don't have an account? <Link to="/signup">SignUp</Link></p>
+      
+
+          <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
         </div>
         <button type="submit" className="submit-btn">Login</button>
       </form>
