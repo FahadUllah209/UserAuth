@@ -1,6 +1,6 @@
 .container {
   width: 350px;
-  background-color: #22a9e3;
+  background-color: #27548A;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
@@ -9,9 +9,9 @@
   margin: 50px auto;
 }
 
-.container h1 {
+.heading {
   font-size: 24px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .container svg {
@@ -19,62 +19,119 @@
   margin-bottom: 10px;
 }
 
-.container input {
-  width: 90%;
-  padding: 10px;
-  margin: 8px auto;
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.user-type-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px 0;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-type-btn {
+  background-color: transparent;
+  color: white;
+  padding: 8px 20px;
+  border: 2px solid #DDA853;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  max-width: 120px;
+}
+
+.user-type-btn:hover {
+  background-color: rgba(221, 168, 83, 0.2);
+}
+
+.user-type-btn.active {
+  background-color: #DDA853;
+  color: white;
+  font-weight: bold;
+}
+
+input {
+  padding: 12px;
   border: none;
   border-radius: 5px;
   font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.container p {
+input:focus {
+  outline: none;
+  box-shadow: 0 0 5px #DDA853;
+}
+
+.fields p {
   margin: 10px 0;
   font-size: 14px;
 }
 
-.container a {
-  color: #ff9800;
+.fields a {
+  color: #DDA853;
   text-decoration: none;
   font-weight: bold;
   font-size: 1rem;
 }
 
-.container a:hover {
+.fields a:hover {
   text-decoration: underline;
 }
 
-button {
-  background-color: #ff9800;
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  text-align: left;
+}
+
+.submit-btn {
+  background-color: #DDA853;
   color: white;
-  padding: 10px 15px;
+  padding: 12px 20px;
   border: none;
   border-radius: 5px;
   font-size: 18px;
   cursor: pointer;
   transition: 0.3s;
   width: 100%;
+  margin-top: 10px;
+  font-weight: bold;
 }
 
-button:hover {
-  background-color: #e68900;
-}
-
-.error {
-  color: red;
-  font-size: 14px;
+.submit-btn:hover {
+  background-color: #c9974a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 480px) {
   .container {
-      width: 90%;
+    width: 90%;
   }
 
-  .container input {
-      font-size: 14px;
+  .user-type-btn {
+    padding: 8px 15px;
+    font-size: 14px;
   }
 
-  button {
-      font-size: 16px;
+  input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .submit-btn {
+    font-size: 16px;
+    padding: 10px 15px;
   }
 }

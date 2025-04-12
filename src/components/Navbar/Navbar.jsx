@@ -1,29 +1,37 @@
-import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import "./Navbar.css";
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './Navbar.css';
 
-function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+const Navbar = () => {
   const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
 
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("currentUser");
-    navigate("/login");
+    localStorage.removeItem('currentUser');
+    navigate('/login');
   };
 
   return (
     <nav className="navbar">
-      <div className="logo">MyBrand</div>
-      <div className="menu-icon" onClick={() => setIsOpen(!isOpen)}>☰</div>
-      <ul className={isOpen ? "nav-links open" : "nav-links"}>
-        <li><NavLink to="/home">Home</NavLink></li>
-        <li><NavLink to="/">SignUp</NavLink></li>
-        <li><NavLink to="/login">Login</NavLink></li>
-        
-      </ul>
+      <div className="nav-logo">
+        <h2>Paint Genius</h2>
+      </div>
+      <div className="nav-links">
+        <Link to="/home">Home</Link>
+        <Link to="/services">Services</Link>
+        {currentUser && currentUser.email ? (
+          <button className="logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Sign Up</Link>
+          </>
+        )}
+      </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
