@@ -24,7 +24,7 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
-    // Clear the error when user starts typing
+  
     setErrors(prev => ({
       ...prev,
       [name]: "",
@@ -37,7 +37,7 @@ const Login = () => {
     let newErrors = {};
     let isValid = true;
 
-    // Email validation
+
     if (!formData.email) {
       newErrors.email = "Email is required";
       isValid = false;
@@ -46,13 +46,12 @@ const Login = () => {
       isValid = false;
     }
 
-    // Password validation
+  
     if (!formData.password) {
       newErrors.password = "Password is required";
       isValid = false;
     }
 
-    // Phone validation for contractors
     if (formData.userType === "contractor" && !formData.phoneNumber) {
       newErrors.phoneNumber = "Phone number is required for contractors";
       isValid = false;
@@ -61,10 +60,8 @@ const Login = () => {
     setErrors(newErrors);
 
     if (isValid) {
-      // Get users from localStorage
       const users = JSON.parse(localStorage.getItem('users') || '[]');
       
-      // Find user with matching email
       const user = users.find(u => u.email === formData.email);
 
       if (!user) {
@@ -75,7 +72,6 @@ const Login = () => {
         return;
       }
 
-      // Check if password matches
       if (user.password !== formData.password) {
         setErrors(prev => ({
           ...prev,
@@ -84,7 +80,6 @@ const Login = () => {
         return;
       }
 
-      // Check if user type matches
       if (user.userType !== formData.userType) {
         setErrors(prev => ({
           ...prev,
@@ -93,7 +88,7 @@ const Login = () => {
         return;
       }
 
-      // For contractors, verify phone number
+
       if (user.userType === "contractor" && user.phoneNumber !== formData.phoneNumber) {
         setErrors(prev => ({
           ...prev,
@@ -102,13 +97,12 @@ const Login = () => {
         return;
       }
 
-      // Store current user in localStorage
       localStorage.setItem('currentUser', JSON.stringify(user));
       
-      // Show success message
+    
       alert('Login Successful!');
 
-      // Navigate to home page
+
       navigate('/home');
     }
   };
