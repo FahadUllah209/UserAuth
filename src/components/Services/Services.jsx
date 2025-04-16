@@ -1,177 +1,315 @@
 import React, { useState } from "react";
-import './Services.css';
+import "./Services.css";
+import RoomEstimate from "./RoomEstimate";
+import BudgetSelector from "./BudgetSelector";
 
 const Services = () => {
-  const [dimensions, setDimensions] = useState({
-    length: "",
+  const [showEstimate, setShowEstimate] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [savedRooms, setSavedRooms] = useState([]);
+  const [showTotalSummary, setShowTotalSummary] = useState(false);
+  const [selectedBudget, setSelectedBudget] = useState(null);
+  const [budgetRates, setBudgetRates] = useState(null);
+  const [roomDetails, setRoomDetails] = useState({
+    roomName: "",
     width: "",
     height: "",
-    windows: "",
-    doors: ""
+    windows: [{ width: "", height: "" }],
+    doors: [{ width: "", height: "" }],
   });
-  const [paintQuality, setPaintQuality] = useState("standard");
-  const [result, setResult] = useState(null);
 
-  const paintPrices = {
-    standard: 25,  // price per square meter
-    premium: 35,
-    luxury: 45
+  const handleBudgetSelect = (budgetKey, budgetDetails) => {
+    setSelectedBudget(budgetKey);
+    setBudgetRates(budgetDetails);
   };
 
-  const handleChange = (e) => {
+  const handleRoomChange = (e) => {
     const { name, value } = e.target;
-    setDimensions(prev => ({
+    setRoomDetails((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const calculatePaintCost = (e) => {
-    e.preventDefault();
-    
-    // Convert string inputs to numbers
-    const length = parseFloat(dimensions.length);
-    const width = parseFloat(dimensions.width);
-    const height = parseFloat(dimensions.height);
-    const windows = parseFloat(dimensions.windows) || 0;
-    const doors = parseFloat(dimensions.doors) || 0;
+  const handleWindowChange = (index, field, value) => {
+    const updatedWindows = [...roomDetails.windows];
+    updatedWindows[index] = {
+      ...updatedWindows[index],
+      [field]: value,
+    };
+    setRoomDetails((prev) => ({
+      ...prev,
+      windows: updatedWindows,
+    }));
+  };
 
-    // Calculate total wall area
-    const totalWallArea = 2 * (length * height + width * height);
-    
-    // Standard deductions for windows and doors
-    const windowArea = windows * 1.5; // Assuming standard window size of 1.5 sq meters
-    const doorArea = doors * 2;   // Assuming standard door size of 2 sq meters
-    
-    // Calculate paintable area
-    const paintableArea = totalWallArea - (windowArea + doorArea);
-    
-    // Calculate paint needed (assuming 1 liter covers 10 sq meters)
-    const litersNeeded = Math.ceil(paintableArea / 10);
-    
-    // Calculate cost
-    const costPerLiter = paintPrices[paintQuality];
-    const totalCost = litersNeeded * costPerLiter;
+  const handleDoorChange = (index, field, value) => {
+    const updatedDoors = [...roomDetails.doors];
+    updatedDoors[index] = {
+      ...updatedDoors[index],
+      [field]: value,
+    };
+    setRoomDetails((prev) => ({
+      ...prev,
+      doors: updatedDoors,
+    }));
+  };
 
-    setResult({
-      paintableArea: paintableArea.toFixed(2),
-      litersNeeded,
-      totalCost: totalCost.toFixed(2)
+  const addWindow = () => {
+    setRoomDetails((prev) => ({
+      ...prev,
+      windows: [...prev.windows, { width: "", height: "" }],
+    }));
+  };
+
+  const addDoor = () => {
+    setRoomDetails((prev) => ({
+      ...prev,
+      doors: [...prev.doors, { width: "", height: "" }],
+    }));
+  };
+
+  const removeWindow = (index) => {
+    setRoomDetails((prev) => ({
+      ...prev,
+      windows: prev.windows.filter((_, i) => i !== index),
+    }));
+  };
+
+  const removeDoor = (index) => {
+    setRoomDetails((prev) => ({
+      ...prev,
+      doors: prev.doors.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleCalculate = () => {
+    if (!roomDetails.width || !roomDetails.height) {
+      alert("Please enter room dimensions first");
+      return;
+    }
+    if (!selectedBudget) {
+      alert("Please select a budget tier first");
+      return;
+    }
+    setShowResults(true);
+  };
+
+  const handleSaveRoom = (estimate) => {
+    if (!roomDetails.roomName) {
+      alert("Please enter a room name before saving");
+      return;
+    }
+    
+    setSavedRooms(prev => [...prev, {
+      ...roomDetails,
+      estimate: estimate,
+      budgetTier: selectedBudget
+    }]);
+
+    // Reset form for next room
+    setRoomDetails({
+      roomName: "",
+      width: "",
+      height: "",
+      windows: [{ width: "", height: "" }],
+      doors: [{ width: "", height: "" }],
     });
+    setShowResults(false);
+  };
+
+  const calculateTotalCost = () => {
+    return savedRooms.reduce((total, room) => total + room.estimate.totalCost, 0);
+  };
+
+  const handleRemoveRoom = (index) => {
+    setSavedRooms(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
     <div className="services-container">
-      <h1>Our Services</h1>
+      <h1 className="services-title">Our Services</h1>
       
-      <div className="paint-calculator">
-        <h2>Paint Calculator</h2>
-        <p>Calculate the amount of paint needed for your room</p>
-        
-        <form onSubmit={calculatePaintCost} className="calculator-form">
-          <div className="dimensions-inputs">
-            <div className="input-group">
-              <label>Room Length (meters)</label>
-              <input
-                type="number"
-                name="length"
-                value={dimensions.length}
-                onChange={handleChange}
-                required
-                min="0"
-                step="0.1"
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Room Width (meters)</label>
-              <input
-                type="number"
-                name="width"
-                value={dimensions.width}
-                onChange={handleChange}
-                required
-                min="0"
-                step="0.1"
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Room Height (meters)</label>
-              <input
-                type="number"
-                name="height"
-                value={dimensions.height}
-                onChange={handleChange}
-                required
-                min="0"
-                step="0.1"
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Number of Windows</label>
-              <input
-                type="number"
-                name="windows"
-                value={dimensions.windows}
-                onChange={handleChange}
-                min="0"
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Number of Doors</label>
-              <input
-                type="number"
-                name="doors"
-                value={dimensions.doors}
-                onChange={handleChange}
-                min="0"
-              />
-            </div>
+      {savedRooms.length > 0 && (
+        <div className="saved-rooms-summary">
+          <h2>Saved Rooms</h2>
+          <div className="saved-rooms-list">
+            {savedRooms.map((room, index) => (
+              <div key={index} className="saved-room-card">
+                <h3>{room.roomName}</h3>
+                <p>Dimensions: {room.width}ft x {room.height}ft</p>
+                <p>Budget Tier: {room.budgetTier}</p>
+                <p>Total Cost: PKR {room.estimate.totalCost.toLocaleString()}</p>
+                <button 
+                  className="remove-room-btn"
+                  onClick={() => handleRemoveRoom(index)}
+                >
+                  Remove Room
+                </button>
+              </div>
+            ))}
           </div>
-
-          <div className="paint-quality">
-            <label>Paint Quality</label>
-            <select value={paintQuality} onChange={(e) => setPaintQuality(e.target.value)}>
-              <option value="standard">Standard (₹25/liter)</option>
-              <option value="premium">Premium (₹35/liter)</option>
-              <option value="luxury">Luxury (₹45/liter)</option>
-            </select>
+          <div className="total-summary">
+            <button 
+              className="show-total-btn"
+              onClick={() => setShowTotalSummary(!showTotalSummary)}
+            >
+              {showTotalSummary ? 'Hide Total Summary' : 'Show Total Summary'}
+            </button>
+            {showTotalSummary && (
+              <div className="total-cost-summary">
+                <h3>Total Project Cost</h3>
+                <p className="total-amount">PKR {calculateTotalCost().toLocaleString()}</p>
+              </div>
+            )}
           </div>
-
-          <button type="submit" className="calculate-btn">Calculate Cost</button>
-        </form>
-
-        {result && (
-          <div className="calculation-result">
-            <h3>Calculation Results</h3>
-            <p>Total Wall Area to Paint: {result.paintableArea} square meters</p>
-            <p>Paint Required: {result.litersNeeded} liters</p>
-            <p>Estimated Cost: ₹{result.totalCost}</p>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="services-grid">
         <div className="service-card">
-          <h3>Interior Painting</h3>
-          <p>Professional interior painting services for your home or office</p>
-        </div>
-        <div className="service-card">
-          <h3>Exterior Painting</h3>
-          <p>Weather-resistant exterior painting solutions</p>
-        </div>
-        <div className="service-card">
-          <h3>Commercial Painting</h3>
-          <p>Large-scale commercial painting projects</p>
-        </div>
-        <div className="service-card">
-          <h3>Decorative Painting</h3>
-          <p>Custom decorative painting and finishes</p>
+          <h2>Room Painting Estimate</h2>
+          <p>Get an accurate estimate for your room painting project</p>
+          <button 
+            className="estimate-btn"
+            onClick={() => setShowEstimate(!showEstimate)}
+          >
+            {showEstimate ? "Hide Estimate" : "Get Estimate"}
+          </button>
         </div>
       </div>
+
+      {showEstimate && (
+        <div className="estimate-form">
+          <BudgetSelector 
+            selectedBudget={selectedBudget}
+            onBudgetSelect={handleBudgetSelect}
+          />
+
+          <h2>Room Details</h2>
+          <div className="form-group">
+            <label>Room Name:</label>
+            <input
+              type="text"
+              name="roomName"
+              value={roomDetails.roomName}
+              onChange={handleRoomChange}
+              placeholder="e.g., Living Room"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Room Width (ft):</label>
+            <input
+              type="number"
+              name="width"
+              value={roomDetails.width}
+              onChange={handleRoomChange}
+              placeholder="Enter width"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Room Height (ft):</label>
+            <input
+              type="number"
+              name="height"
+              value={roomDetails.height}
+              onChange={handleRoomChange}
+              placeholder="Enter height"
+            />
+          </div>
+
+          <div className="windows-section">
+            <h3>Windows</h3>
+            {roomDetails.windows.map((window, index) => (
+              <div key={index} className="window-input-group">
+                <h4>Window {index + 1}</h4>
+                <div className="form-group">
+                  <label>Width (ft):</label>
+                  <input
+                    type="number"
+                    value={window.width}
+                    onChange={(e) => handleWindowChange(index, "width", e.target.value)}
+                    placeholder="Window width"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Height (ft):</label>
+                  <input
+                    type="number"
+                    value={window.height}
+                    onChange={(e) => handleWindowChange(index, "height", e.target.value)}
+                    placeholder="Window height"
+                  />
+                </div>
+                <button 
+                  className="remove-btn"
+                  onClick={() => removeWindow(index)}
+                >
+                  Remove Window
+                </button>
+              </div>
+            ))}
+            <button className="add-btn" onClick={addWindow}>
+              Add Window
+            </button>
+          </div>
+
+          <div className="doors-section">
+            <h3>Doors</h3>
+            {roomDetails.doors.map((door, index) => (
+              <div key={index} className="door-input-group">
+                <h4>Door {index + 1}</h4>
+                <div className="form-group">
+                  <label>Width (ft):</label>
+                  <input
+                    type="number"
+                    value={door.width}
+                    onChange={(e) => handleDoorChange(index, "width", e.target.value)}
+                    placeholder="Door width"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Height (ft):</label>
+                  <input
+                    type="number"
+                    value={door.height}
+                    onChange={(e) => handleDoorChange(index, "height", e.target.value)}
+                    placeholder="Door height"
+                  />
+                </div>
+                <button 
+                  className="remove-btn"
+                  onClick={() => removeDoor(index)}
+                >
+                  Remove Door
+                </button>
+              </div>
+            ))}
+            <button className="add-btn" onClick={addDoor}>
+              Add Door
+            </button>
+          </div>
+
+          <div className="calculate-section">
+            <button 
+              className="calculate-btn"
+              onClick={handleCalculate}
+            >
+              Calculate Estimate
+            </button>
+          </div>
+
+          {showResults && (
+            <RoomEstimate 
+              roomDetails={roomDetails}
+              budgetRates={budgetRates}
+              onSave={handleSaveRoom}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

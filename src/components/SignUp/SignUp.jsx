@@ -134,91 +134,93 @@ const SignUp = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="heading">SignUp Here</h1>
-      <CgProfile />
-      <form onSubmit={handleSubmit}>
-        <div className="fields">
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter Your Name"
-            value={formData.name}
-            onChange={handleChange}
-            className={errors.name ? "error-input" : ""}
-            required
-          />
-          {errors.name && <p className="error-message">{errors.name}</p>}
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className={errors.email ? "error-input" : ""}
-            required
-          />
-          {errors.email && <p className="error-message">{errors.email}</p>}
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className={errors.password ? "error-input" : ""}
-            required
-          />
-          {errors.password && <p className="error-message">{errors.password}</p>}
-
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className={errors.confirmPassword ? "error-input" : ""}
-            required
-          />
-          {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
-
-          {formData.userType === "contractor" && (
+    <div className="signup-wrapper">
+      <div className="container">
+        <h1 className="heading">SignUp Here</h1>
+        <CgProfile />
+        <form onSubmit={handleSubmit}>
+          <div className="fields">
             <input
-              type="tel"
-              name="phoneNumber"
-              placeholder="Phone Number"
-              value={formData.phoneNumber}
+              type="text"
+              name="name"
+              placeholder="Enter Your Name"
+              value={formData.name}
               onChange={handleChange}
-              className={errors.phoneNumber ? "error-input" : ""}
+              className={errors.name ? "error-input" : ""}
               required
             />
-          )}
-          {errors.phoneNumber && <p className="error-message">{errors.phoneNumber}</p>}
+            {errors.name && <p className="error-message">{errors.name}</p>}
 
-          <div className="user-type-buttons">
-            <button
-              type="button"
-              className={`user-type-btn ${formData.userType === "user" ? "active" : ""}`}
-              onClick={() => setFormData((prev) => ({ ...prev, userType: "user", phoneNumber: "" }))}
-            >
-              User
-            </button>
-            <button
-              type="button"
-              className={`user-type-btn ${formData.userType === "contractor" ? "active" : ""}`}
-              onClick={() => setFormData((prev) => ({ ...prev, userType: "contractor" }))}
-            >
-              Contractor
-            </button>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className={errors.email ? "error-input" : ""}
+              required
+            />
+            {errors.email && <p className="error-message">{errors.email}</p>}
+
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className={errors.password ? "error-input" : ""}
+              required
+            />
+            {errors.password && <p className="error-message">{errors.password}</p>}
+
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className={errors.confirmPassword ? "error-input" : ""}
+              required
+            />
+            {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
+
+            {formData.userType === "contractor" && (
+              <input
+                type="tel"
+                name="phoneNumber"
+                placeholder="Phone Number"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className={errors.phoneNumber ? "error-input" : ""}
+                required
+              />
+            )}
+            {errors.phoneNumber && <p className="error-message">{errors.phoneNumber}</p>}
+
+            <div className="user-type-buttons">
+              <button
+                type="button"
+                className={`user-type-btn ${formData.userType === "user" ? "active" : ""}`}
+                onClick={() => setFormData((prev) => ({ ...prev, userType: "user", phoneNumber: "" }))}
+              >
+                User
+              </button>
+              <button
+                type="button"
+                className={`user-type-btn ${formData.userType === "contractor" ? "active" : ""}`}
+                onClick={() => setFormData((prev) => ({ ...prev, userType: "contractor" }))}
+              >
+                Contractor
+              </button>
+            </div>
+
+            <p>
+              Already have an account? <Link to="/login">Login</Link>
+            </p>
           </div>
-
-          <p>
-            Already have an account? <Link to="/login">Login</Link>
-          </p>
-        </div>
-        <button type="submit" className="submit-btn">SignUp</button>
-      </form>
+          <button type="submit" className="submit-btn">SignUp</button>
+        </form>
+      </div>
     </div>
   );
 };

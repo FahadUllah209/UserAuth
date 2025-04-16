@@ -108,70 +108,72 @@ const Login = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="heading">Login Here</h1>
-      <CgProfile />
-      <form onSubmit={handleSubmit}>
-        <div className="fields">
-          {errors.general && <p className="error-message">{errors.general}</p>}
+    <div className="login-wrapper">
+      <div className="container">
+        <h1 className="heading">Login Here</h1>
+        <CgProfile />
+        <form onSubmit={handleSubmit}>
+          <div className="fields">
+            {errors.general && <p className="error-message">{errors.general}</p>}
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className={errors.email ? "error-input" : ""}
-            required
-          />
-          {errors.email && <p className="error-message">{errors.email}</p>}
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className={errors.password ? "error-input" : ""}
-            required
-          />
-          {errors.password && <p className="error-message">{errors.password}</p>}
-          {formData.userType === "contractor" && (
             <input
-              type="tel"
-              name="phoneNumber"
-              placeholder="Phone Number"
-              value={formData.phoneNumber}
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
               onChange={handleChange}
-              className={errors.phoneNumber ? "error-input" : ""}
-              required={formData.userType === "contractor"}
+              className={errors.email ? "error-input" : ""}
+              required
             />
-          )}
-          {errors.phoneNumber && <p className="error-message">{errors.phoneNumber}</p>}
+            {errors.email && <p className="error-message">{errors.email}</p>}
 
-          <div className="user-type-buttons">
-            <button
-              type="button"
-              className={`user-type-btn ${formData.userType === "user" ? "active" : ""}`}
-              onClick={() => setFormData(prev => ({ ...prev, userType: "user", phoneNumber: "" }))}
-            >
-              User
-            </button>
-            <button
-              type="button"
-              className={`user-type-btn ${formData.userType === "contractor" ? "active" : ""}`}
-              onClick={() => setFormData(prev => ({ ...prev, userType: "contractor" }))}
-            >
-              Contractor
-            </button>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className={errors.password ? "error-input" : ""}
+              required
+            />
+            {errors.password && <p className="error-message">{errors.password}</p>}
+            {formData.userType === "contractor" && (
+              <input
+                type="tel"
+                name="phoneNumber"
+                placeholder="Phone Number"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className={errors.phoneNumber ? "error-input" : ""}
+                required={formData.userType === "contractor"}
+              />
+            )}
+            {errors.phoneNumber && <p className="error-message">{errors.phoneNumber}</p>}
+
+            <div className="user-type-buttons">
+              <button
+                type="button"
+                className={`user-type-btn ${formData.userType === "user" ? "active" : ""}`}
+                onClick={() => setFormData(prev => ({ ...prev, userType: "user", phoneNumber: "" }))}
+              >
+                User
+              </button>
+              <button
+                type="button"
+                className={`user-type-btn ${formData.userType === "contractor" ? "active" : ""}`}
+                onClick={() => setFormData(prev => ({ ...prev, userType: "contractor" }))}
+              >
+                Contractor
+              </button>
+            </div>
+
+        
+
+            <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
           </div>
-
-      
-
-          <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
-        </div>
-        <button type="submit" className="submit-btn">Login</button>
-      </form>
+          <button type="submit" className="submit-btn">Login</button>
+        </form>
+      </div>
     </div>
   );
 };

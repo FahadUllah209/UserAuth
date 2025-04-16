@@ -1,123 +1,383 @@
 .home-container {
-  max-width: 1200px;
-  background: #27548A;
-  color: white;
-  padding: 30px;
+  max-width: 100%;
+  background: #ffffff;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(rgba(39, 84, 138, 0.75), rgba(39, 84, 138, 0.75)),
+              url('/Homepage.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  margin: 50px auto;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+  padding: 0 20px;
 }
 
-.home-container h1 {
-  font-size: 32px;
-  margin-bottom: 10px;
-  color: #DDA853;
+.hero-content {
+  max-width: 800px;
 }
 
-.home-container p {
-  font-size: 18px;
+.user-info {
   margin-bottom: 20px;
 }
 
-.contractor-info {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  border-radius: 8px;
-  margin: 20px 0;
-  text-align: left;
+.user-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  color: #DDA853;
 }
 
-.contractor-info p {
-  margin: 5px 0;
-  font-size: 16px;
+.user-info p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-text {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.cta-button {
+  background-color: #DDA853;
+  color: white;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(221, 168, 83, 0.3);
+}
+
+.cta-button:hover {
+  background-color: #c9974a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(221, 168, 83, 0.4);
+}
+
+/* Welcome Section */
+.welcome-section {
+  background: #f8f9fa;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.welcome-section h2 {
+  color: #27548A;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+}
+
+/* Services Highlights */
+.services-highlights {
+  padding: 80px 20px;
+  background: #ffffff;
+}
+
+.services-highlights h2 {
+  text-align: center;
+  color: #27548A;
+  margin-bottom: 50px;
+  font-size: 2.5rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.service-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.service-icon {
+  font-size: 3rem;
+  color: #DDA853;
+  margin-bottom: 20px;
+}
+
+/* Why Choose Us */
+.why-choose-us {
+  background: #f8f9fa;
+  padding: 80px 20px;
+}
+
+.why-choose-us h2 {
+  text-align: center;
+  color: #27548A;
+  margin-bottom: 50px;
+  font-size: 2.5rem;
 }
 
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin: 30px 0;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .feature-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.feature-card h3 {
+/* Testimonials */
+.testimonials {
+  padding: 80px 20px;
+  background: #ffffff;
+}
+
+.testimonials h2 {
+  text-align: center;
+  color: #27548A;
+  margin-bottom: 50px;
+  font-size: 2.5rem;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.testimonial-card p {
+  font-style: italic;
+  margin-bottom: 20px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.testimonial-card h4 {
+  color: #27548A;
+}
+
+/* Stats Section */
+.stats-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  padding: 60px 20px;
+  background: #27548A;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 15px;
+  margin-bottom: 80px;
+}
+
+.stat-card {
+  text-align: center;
+  color: white;
+}
+
+.stat-card h3 {
+  font-size: 2.5rem;
   color: #DDA853;
   margin-bottom: 10px;
-  font-size: 20px;
 }
 
-.feature-card p {
-  font-size: 14px;
-  margin-bottom: 15px;
-  color: rgba(255, 255, 255, 0.8);
+/* CTA Section */
+.cta-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: #f8f9fa;
+  margin-bottom: 40px;
 }
 
-.action-btn {
-  background-color: #DDA853;
-  color: white;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.cta-section h2 {
+  color: #27548A;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
 }
 
-.action-btn:hover {
-  background-color: #c9974a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.cta-section p {
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  color: #555;
 }
 
+/* Contractor Info */
+.contractor-info {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  margin: 30px auto;
+  max-width: 600px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contractor-info h3 {
+  color: #27548A;
+  margin-bottom: 20px;
+}
+
+.contractor-info p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  color: #555;
+}
+
+.contractor-info svg {
+  color: #DDA853;
+}
+
+/* Logout Button */
 .logout-button {
-  background-color: #DDA853;
+  background-color: #e74c3c;
   color: white;
-  padding: 12px 25px;
+  padding: 12px 30px;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 30px;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 20px;
+  margin: 20px auto;
+  display: block;
 }
 
 .logout-button:hover {
-  background-color: #c9974a;
+  background-color: #c0392b;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
-  .home-container {
-    width: 90%;
-    padding: 20px;
+  .hero-content h1 {
+    font-size: 2.5rem;
   }
 
-  .features {
+  .hero-text {
+    font-size: 1.2rem;
+  }
+
+  .services-grid,
+  .features,
+  .testimonials-grid {
     grid-template-columns: 1fr;
   }
 
-  .feature-card {
-    padding: 15px;
+  .stats-section {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .home-container h1 {
-    font-size: 24px;
+  .cta-section h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-section {
+    grid-template-columns: 1fr;
   }
 
-  .home-container p {
-    font-size: 16px;
+  .hero-content h1 {
+    font-size: 2rem;
   }
+
+  .cta-button {
+    padding: 12px 30px;
+    font-size: 1rem;
+  }
+}
+
+.profile-nav {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 30px;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #DDA853;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.profile-btn:hover {
+  background-color: #c9974a;
+  transform: translateY(-2px);
+}
+
+.logout-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.logout-button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.logout-button:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
 }
