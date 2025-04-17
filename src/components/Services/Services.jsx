@@ -1,22 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Services.css";
 import RoomEstimate from "./RoomEstimate";
 import BudgetSelector from "./BudgetSelector";
 
 const Services = () => {
   const [showEstimate, setShowEstimate] = useState(false);
+  const [showBudgetSelector, setShowBudgetSelector] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [savedRooms, setSavedRooms] = useState([]);
-  const [showTotalSummary, setShowTotalSummary] = useState(false);
-  const [selectedBudget, setSelectedBudget] = useState(null);
-  const [budgetRates, setBudgetRates] = useState(null);
-  const [roomDetails, setRoomDetails] = useState({
-    roomName: "",
-    width: "",
-    height: "",
-    windows: [{ width: "", height: "" }],
-    doors: [{ width: "", height: "" }],
+  const [savedRooms, setSavedRooms] = useState(() => {
+    // Initialize from localStorage if available
+    const saved = localStorage.getItem('savedRooms');
+    return saved ? JSON.parse(saved) : [];
   });
+  const [showTotalSummary, setShowTotalSummary] = useState(false);
+  const [selectedBudget, setSelectedBudget] = useState(() => {
+    const savedBudget = localStorage.getItem('selectedBudget');
+    return savedBudget ? JSON.parse(savedBudget) : null;
+  });
+  const [budgetRates, setBudgetRates] = useState(() => {
+    const savedRates = localStorage.getItem('budgetRates');
+    return savedRates ? JSON.parse(savedRates) : null;
+  });
+  const [roomDetails, setRoomDetails] = useState(() => {
+    const savedDetails = localStorage.getItem('roomDetails');
+    return savedDetails ? JSON.parse(savedDetails) : {
+      roomName: "",
+      width: "",
+      height: "",
+      windows: [{ width: "", height: "" }],
+      doors: [{ width: "", height: "" }],
+    };
+  });
+
+  // Save to localStorage whenever relevant state changes
+  useEffect(() => {
+    localStorage.setItem('savedRooms', JSON.stringify(savedRooms));
+  }, [savedRooms]);
+
+  useEffect(() => {
+    if (selectedBudget) {
+      localStorage.setItem('selectedBudget', JSON.stringify(selectedBudget));
+    }
+    if (budgetRates) {
+      localStorage.setItem('budgetRates', JSON.stringify(budgetRates));
+    }
+  }, [selectedBudget, budgetRates]);
+
+  useEffect(() => {
+    localStorage.setItem('roomDetails', JSON.stringify(roomDetails));
+  }, [roomDetails]);
 
   const handleBudgetSelect = (budgetKey, budgetDetails) => {
     setSelectedBudget(budgetKey);
@@ -101,11 +133,13 @@ const Services = () => {
       return;
     }
     
-    setSavedRooms(prev => [...prev, {
+    const newSavedRoom = {
       ...roomDetails,
       estimate: estimate,
       budgetTier: selectedBudget
-    }]);
+    };
+    
+    setSavedRooms(prev => [...prev, newSavedRoom]);
 
     // Reset form for next room
     setRoomDetails({
@@ -168,6 +202,17 @@ const Services = () => {
 
       <div className="services-grid">
         <div className="service-card">
+          <h2>Budget Planning</h2>
+          <p>Select your preferred budget tier for your project</p>
+          <button 
+            className="estimate-btn"
+            onClick={() => setShowBudgetSelector(!showBudgetSelector)}
+          >
+            {showBudgetSelector ? "Hide Budget Selector" : "Show Budget Selector"}
+          </button>
+        </div>
+
+        <div className="service-card">
           <h2>Room Painting Estimate</h2>
           <p>Get an accurate estimate for your room painting project</p>
           <button 
@@ -179,13 +224,17 @@ const Services = () => {
         </div>
       </div>
 
-      {showEstimate && (
-        <div className="estimate-form">
+      {showBudgetSelector && (
+        <div className="budget-selector-container">
           <BudgetSelector 
             selectedBudget={selectedBudget}
             onBudgetSelect={handleBudgetSelect}
           />
+        </div>
+      )}
 
+      {showEstimate && (
+        <div className="estimate-form">
           <h2>Room Details</h2>
           <div className="form-group">
             <label>Room Name:</label>

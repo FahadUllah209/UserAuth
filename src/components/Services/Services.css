@@ -13,7 +13,7 @@
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   margin-bottom: 2rem;
 }
@@ -39,6 +39,7 @@
   background: #3498db;
   color: white;
   border: none;
+  margin-top: 10px;
   padding: 0.8rem 1.5rem;
   border-radius: 5px;
   cursor: pointer;
@@ -527,4 +528,12 @@
   .budget-card {
     padding: 1.5rem;
   }
+}
+
+.budget-selector-container {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 } 
